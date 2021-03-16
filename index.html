@@ -9,16 +9,20 @@
 
 <body>
 	<!-- user details section -->
-   	<div class="container bg-light shadow-lg p-4 my-4">
-        <h1>Trello User Details</h1>
-        <button type="" class="btn btn-dark userLoader">Load user info</button>
+   	<div class="container bg-light shadow-lg p-4 my-4 font-weight-bold">
+        <h1 class="title mb-2">Trello User Details</h1>
+        
         <p> UserID :  <span class="userID"></span></p>
-        <p> Name :  <span class="name"></span></p>
+        <p class="text-capitalize"> Name :  <span class="name"></span></p>
         <p> Email : <span class="email"></span></p>
+         
+        <!--button to call event for loading user details-->
+        <button type="button" class="btn btn-dark userLoader my-2">Load user info</button>
 
            <!-- board details section -->
           <div class="container bg-light boards">
-            <h4>Trello User's Boards Details</h4>
+            <h4>user's Boards list</h4>
+            <h5>url   -  board name</h5>
             <button type="button" class="btn btn-dark boardsLoader">Load user boards</button>
             <ul class="list-group myboards">
                     
@@ -45,17 +49,42 @@
             <div class="msg"></div>
         </form>
     </div>
+     
+     <div class="container">
+        <div class="row">
 
+             <div class="col">
+                 <!-- update board section -->
+                 <div class="container bg-light shadow-lg p-4 mb-4">
+                 <h2>update Board</h2> 
 
-    <!-- update board section -->
-    <div class="container bg-light shadow-lg p-4 mb-4">
-    	<h2>update Board</h2> 
+                 <form  id="updateBoardSubmit" action="" >
+                   <div class="form-group">
+                     <label for="name">Board Name:</label>
+                     <input type="text" class="form-control" name="name">
+                   </div>
 
-         <form  id="updateBoardSubmit" action="" >
-         	<div class="form-group">
-              <label for="name">Board Name:</label>
-              <input type="text" class="form-control" name="name">
-            </div>
+                  <div class="form-group">
+                   <label for="description">Description:</label>
+                   <textarea class="form-control" rows="3" name="description" name="text"></textarea>
+                  </div>
+
+                 <button type="submit" class="btn btn-primary">Submit</button>
+               </form>
+               </div>
+
+             </div>
+
+             <div class="col">
+                  <!-- add items to board section -->
+                 <div class="container bg-light shadow-lg p-4 mb-4">
+                 <h2>add item</h2> 
+
+                 <form  id="updateBoardSubmit" action="" >
+                 <div class="form-group">
+                 <label for="name">Board Name:</label>
+                 <input type="text" class="form-control" name="name">
+                 </div>
 
             <div class="form-group">
               <label for="description">Description:</label>
@@ -66,26 +95,15 @@
         </form>
     </div>
 
-    <!-- add items to board section -->
-    <div class="container bg-light shadow-lg p-4 mb-4">
-    	<h2>Add Items To Board</h2> 
-
-         <form  id="updateBoardSubmit" action="" >
-         	<div class="form-group">
-              <label for="name">Board Name:</label>
-              <input type="text" class="form-control" name="name">
-            </div>
-
-            <div class="form-group">
-              <label for="description">Description:</label>
-              <textarea class="form-control" rows="3" name="description" name="text"></textarea>
-            </div>
-
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
-    </div>
 
 
+             </div>
+
+        </div>
+     </div>
+
+    
+   
 
 <!-- jQuery library -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -97,125 +115,69 @@
 <script crossorigin="anonymous" type="text/javascript">
 
 $(document).ready(function(){
-
-//key and token from trello api
-var key = 'b4f8c0c7635f215dd8cddc20829a24e2';
-var token = '98956b6556f88aad6697ac25f4474a79c3af909f6c8b6e503361c8726ecc3df1';
+    //key and token from trello api
+var key = "b4f8c0c7635f215dd8cddc20829a24e2";
+var token = "98956b6556f88aad6697ac25f4474a79c3af909f6c8b6e503361c8726ecc3df1";
 var myurl = "https://api.trello.com/1/members/me?key="+key+"&token="+token;
 
-$( ".userLoader" ).on( "click", getUser);
-// $( ".boardsLoader" ).on( "click", getBoards);
 
-//hide the boards button
+ //hide the boards button
  $('.boards').hide();
   
-  //funhction to get users
-  function getUser()
-  { 
+ //funhction to get users
+ function getUser(){ 
     //jquery ajax to call get and then promise to pass data to dom
-    $.ajax({
-             url: myurl,
-             dataType : 'application/json', // type of data to send
-             headers: {'Access-Control-Allow-Origin':'*', 'Content-Type': 'application/json'},
-             crossDomain: true 
-
-       }).then(function(data) {
+    $.ajax({ url: myurl  }).then(function(data) {
         $('.name').append(data.username);
         $('.email').append(data.email);
         $('.userID').append(data.id);
         $('.userLoader').hide();
          $('.boards').show();
-    });
+    });    
+  }
+
+  //function to get boards associated with user
+function getBoards(){ 
+      $.ajax({ 
+        url:'https://api.trello.com/1/members/me/boards?key=b4f8c0c7635f215dd8cddc20829a24e2&token=98956b6556f88aad6697ac25f4474a79c3af909f6c8b6e503361c8726ecc3df1' })
+         .then( function(data) { 
+            $.each(data, function(index, val){    
+                                
+                      $('.myboards').append(
+                       "<li class='list-group-item myBoardUrl'>"+"<span class='myBoardName p-3 m-2 btn btn-small bg-light'>"+data[index].name+"</span>"+data[index].url+"</li>");            
+                    
+             })
+          })
+         $('.boardsLoader').hide()//hide button 
 }
+
+function createBoard(){
+  //prevent form action default behaviour
+    event.preventDefault();
+    //get value of board name
+    var newBoardName = $('input[name=name]').val();
+    //form data to send to trello server
+    var formData = {'name' : newBoardName,'description': $('input[name=description]').val()};
+    // process the form
+   $.ajax({
+       type : 'POST', // type of HTTP verb 
+       url  :'https://api.trello.com/1/boards/?key='+key+'&token='+token+newBoardName, // the url to POST
+       data : formData, // form data object
+       dataType : 'application/json', // type of data to send
+       headers: {'Content-Type': 'application/json'},
+       crossDomain: true}).done(function(data) {//  promise callback
+                      $('form').html('<div class="alert alert-success">new board created..</div>');
+                       }).fail(function(data) {// using the fail promise callback
+      //Server failed to respond - Show an error message
+      $('.msg').html(alert('error connecting server'));
+    });
+
+}
+  
+  $( ".userLoader" ).on( "click", getUser);
+  $( ".boardsLoader" ).on( "click", getBoards);
+  $('#newBoardSubmit').on('submit', createBoard);
 })
-// //function to get boards associated with user
-// function getBoards() 
-// { 
-//   $.ajax({ url:'https://api.trello.com/1/members/me/boards?key=b4f8c0c7635f215dd8cddc20829a24e2&token=98956b6556f88aad6697ac25f4474a79c3af909f6c8b6e503361c8726ecc3df1'
-//   }).then( function(data) { 
-//         $.each(data, function(){  
-//           //loop through return json data from server
-//                 for (i in data) {
-//                   //append data to dom
-//                       $('.myboards').append(
-//                        "<li class='list-group-item myBoardUrl'>"+data[i].url+"<span class='myBoardName px-2 badge badge-secondary'>"+data[i].name+"</span></li>");                      
-//                      }
-              
-//                $('.boardsLoader').hide()//hide button 
- 
-// });
-//     });
-// }
-
-// function createBoard(){
-//   //prevent form action default behaviour
-//     event.preventDefault();
-//     //get value of board name
-//     var newBoardName = $('input[name=name]').val();
-//     //form data to send to trello server
-//     var formData = {'name' : newBoardName,'description': $('input[name=description]').val()};
-//     // process the form
-//    $.ajax({
-//        type : 'POST', // type of HTTP verb 
-//        url  :'https://api.trello.com/1/boards/?key='+key+'&token='+token+newBoardName, // the url to POST
-//        data : formData, // form data object
-//        dataType : 'application/json', // type of data to send
-//        headers: {'Content-Type': 'application/json'},
-//        crossDomain: true}).done(function(data) {//  promise callback
-//                       $('form').html('<div class="alert alert-success">new board created..</div>');
-//                        }).fail(function(data) {// using the fail promise callback
-//       //Server failed to respond - Show an error message
-//       $('.msg').html(alert('error connecting server'));
-//     });
-
-// }
-
-// function addToDoItem(){
-//   event.preventDefault();
-//   var newBoardName = $('input[name=name]').val();
-//   var formData = {'name' : newBoardName,'description': $('input[name=description]').val()};
-
-// // process the form
-//    $.ajax({
-//        type : 'POST', // type of HTTP verb 
-//        url  :'https://api.trello.com/1/boards/?key='+key+'&token='+token+newBoardName, // the url to POST
-//        data : formData, // form data object
-//        dataType : 'application/json', // type of data to send
-//        headers: {'Content-Type': 'application/json'},
-//        crossDomain: true 
-//        }).done(function(data) {//  promise callback
-//           $('form').html(alert('new board posted..'));
-//     }).fail(function(data) {// using the fail promise callback
-//       //Server failed to respond - Show an error message
-//       $('form').html('<div class="alert alert-danger">Could not reach server, please try again later.</div>');
-//     });
-
-// }
-
-// function upDateItems(){
-//  var boardName = $('input[name=name]').val();
-//     //form data to send to trello server
-//      var formData = {'name' : boardName,'description': $('input[name=description]').val()};
-//   $.ajax({
-//               url: myurl ,
-//               headers: {  'Content-Type': 'application/json'},
-//               crossDomain: true,
-//               method: 'PUT',
-//               data: JSON.stringify(formData)
-//           }).done(function(data) {
-//                console.log(data.ticket);
-//            }).fail(function() {
-//                console.log('Failed!');
-//          });
-// 
-
- 
-// $( ".userLoader" ).on( "click", getUser);
-// $( ".boardsLoader" ).on( "click", getBoards);
-// $('#newBoardSubmit').on('submit',createBoard);
-       
-    
-// })
 
 </script>
 </body>
