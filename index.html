@@ -161,7 +161,7 @@ function createBoard(){
     // process the form
    $.ajax({
        type : 'POST', // type of HTTP verb 
-       url  :'https://api.trello.com/1/boards/?key='+key+'&token='+token+"&name="+newBoardName, // the url to POST
+       url  :'https://api.trello.com/1/boards?key='+key+'&token='+token+"&name="+newBoardName, // the url to POST
        data : formData, // form data object
        dataType : 'application/json', // type of data to send
        headers: {'Content-Type': 'application/json'},
