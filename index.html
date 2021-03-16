@@ -8,9 +8,26 @@
 
 
 <body>
-	<!-- user details section -->
-   	<div class="container bg-light shadow-lg p-4 my-4 font-weight-bold">
-        <h1 class="title mb-2">Trello User Details</h1>
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+      <li class="nav-item">
+         <a class="nav-link active" id="user-tab" data-toggle="tab" href="#user" role="tab" aria-controls="user" aria-selected="true">User</a>
+      </li>
+     <li class="nav-item">
+       <a class="nav-link" id="create-board-tab" data-toggle="tab" href="#create-board" role="tab" aria-controls="create-board" aria-selected="false">create board</a>
+     </li>
+     <li class="nav-item">
+       <a class="nav-link" id="add-item-tab" data-toggle="tab" href="#add-item" role="tab" aria-controls="add-item" aria-selected="false">Add card to to-do list</a>
+     </li>
+     <li class="nav-item">
+       <a class="nav-link" id="edit-item-tab" data-toggle="tab" href="#edit-item" role="tab" aria-controls="edit-item" aria-selected="false">Edit Item</a>
+     </li>
+   </ul>
+
+<div class="tab-content" id="myTabContent">
+  <div class="tab-pane fade show active" id="user" role="tabpanel" aria-labelledby="user">
+   <!-- user details section -->
+    <div class="container bg-light shadow-lg p-4 my-4 font-weight-bold">
+      <h1 class="title mb-2">Trello User Details</h1>
         
         <p> UserID :  <span class="userID"></span></p>
         <p class="text-capitalize"> Name :  <span class="name"></span></p>
@@ -19,25 +36,88 @@
         <!--button to call event for loading user details-->
         <button type="button" class="btn btn-dark userLoader my-2">Load user info</button>
 
-           <!-- board details section -->
-          <div class="container bg-light boards">
-            <h4>user's Boards list</h4>
-            <h5>url   -  board name</h5>
-            <button type="button" class="btn btn-dark boardsLoader">Load user boards</button>
+        <!-- board details section -->
+        <div class="container bg-light boards">
+          <h4>user's Boards list</h4>
+          <h6>url   -  board name</h6>
+          <button type="button" class="btn btn-dark boardsLoader">Load user boards</button>
             <ul class="list-group myboards">
                     
             </ul>
-          </div>
-    </div>
+        </div>
 
+    </div>
+   </div>
+
+  <div class="tab-pane fade" id="add-item" role="tabpanel" aria-labelledby="add-item-tab">
+    <div class="container bg-light shadow-lg p-4 mb-4">
+      <!-- add items to board section -->                 
+       <h2>add card on list</h2> 
+
+      <form  id="updateBoardSubmit">
+
+        <div class="form-group">
+           <label class="input-group-text" for="myboardList">select board to add card</label>
+           <select class="custom-select" id="myboardList">
+             <option selected>select board</option>    
+          </select>
+       </div>
+
+       <div class="form-group">
+         <label for="name">Card Name:</label>
+            <input type="text" class="form-control" name="name">
+        </div>
+        
+        <div class="form-group">
+          <label for="name">Due date:</label>                    
+           <input type="date" class="form-control" name="date" id="date">
+        </div>
+
+        <div class="form-group">
+          <label for="description">Description:</label>
+           <textarea class="form-control" rows="3" name="description" id="description"></textarea>
+        </div>
+         
+        <div class="container bg-faded py-2">
+         
+          <div class="form-group">
+            <label for="Key-task1">Key-task1:</label>
+              <textarea class="form-control" rows="2" name="Key-task1"  id="Key-task1"></textarea>
+           </div>
+
+          <div class="form-group">
+            <label for="key-task2">key-task2</label>
+            <textarea class="form-control" rows="2" name="key-task2" id="key-task2"></textarea>
+           </div>
+
+         </div>
+
+       <div class="container bg-faded py-2">
+        <div class="form-group">
+          <label for="additional-task1">additional-task1:</label>
+            <textarea class="form-control" rows="2" name="additional-task1"  id="additional-task1"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="additional-task2">additional-task2</label>
+            <textarea class="form-control" rows="2" name="additional-task2" id="additional-task2"></textarea>
+        </div>
+     </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+</div>
+
+  <div class="tab-pane fade" id="create-board" role="tabpanel" aria-labelledby="create-board-tab">
     <!-- create board section -->
     <div class="container bg-light shadow-lg p-4 mb-4">
-    	<h2>Create Board</h2> 
+      <h2>Create Board</h2> 
 
-        <form  id="newBoardSubmit" >
+        <form  id="newBoardForm" >
            <div class="form-group">
-              <label for="name">Board Name:</label>
-              <input type="text" class="form-control" name="name">
+              <label for="newboardName">Board Name:</label>
+              <input type="text" class="form-control" name="newboardName">
             </div>
 
             <div class="form-group">
@@ -48,61 +128,31 @@
             <button type="submit" class="btn btn-primary">Submit</button>
             <div class="msg"></div>
         </form>
-    </div>
-     
-     <div class="container">
-        <div class="row">
+    </div>     
+  </div>
 
-             <div class="col">
-                 <!-- update board section -->
-                 <div class="container bg-light shadow-lg p-4 mb-4">
-                 <h2>update Board</h2> 
+  <div class="tab-pane fade" id="edit-item" role="tabpanel" aria-labelledby="edit-item-tab">
+    <div class="container bg-light shadow-lg p-4 mb-4">
+      <!-- update board section -->                 
+        <h2>update Board</h2> 
 
-                 <form  id="updateBoardSubmit" action="" >
-                   <div class="form-group">
-                     <label for="name">Board Name:</label>
-                     <input type="text" class="form-control" name="name">
-                   </div>
+        <form  id="updateBoardSubmit" action="" >
+          <div class="form-group">
+            <label for="name">Board Name:</label>
+              <input type="text" class="form-control" name="name">
+          </div>
 
-                  <div class="form-group">
-                   <label for="description">Description:</label>
-                   <textarea class="form-control" rows="3" name="description" name="text"></textarea>
-                  </div>
+          <div class="form-group">
+            <label for="description">Description:</label>
+             <textarea class="form-control" rows="3" name="description" name="text"></textarea>
+          </div>
 
-                 <button type="submit" class="btn btn-primary">Submit</button>
-               </form>
-               </div>
-
-             </div>
-
-             <div class="col">
-                  <!-- add items to board section -->
-                 <div class="container bg-light shadow-lg p-4 mb-4">
-                 <h2>add item</h2> 
-
-                 <form  id="updateBoardSubmit" action="" >
-                 <div class="form-group">
-                 <label for="name">Board Name:</label>
-                 <input type="text" class="form-control" name="name">
-                 </div>
-
-            <div class="form-group">
-              <label for="description">Description:</label>
-              <textarea class="form-control" rows="3" name="description" name="text"></textarea>
-            </div>
-
-            <button type="submit" class="btn btn-primary">Submit</button>
+          <button type="submit" class="btn btn-primary">Submit</button>
         </form>
-    </div>
+      </div>
+  </div>
 
-
-
-             </div>
-
-        </div>
-     </div>
-
-    
+</div>
    
 
 <!-- jQuery library -->
@@ -115,6 +165,15 @@
 <script crossorigin="anonymous" type="text/javascript">
 
 $(document).ready(function(){
+  $.ajax({
+    url: 'https://api.trello.com/1/members/me/boards/lists?key=b4f8c0c7635f215dd8cddc20829a24e2&token=98956b6556f88aad6697ac25f4474a79c3af909f6c8b6e503361c8726ecc3df1' 
+  }).then(function(data){
+     $.each(data, function(i, k){   
+
+           $('#myboardList').append("<option value="+data[i].id+" id='idList'>"+data[i].name+"</option>");
+     })
+
+  })
     //key and token from trello api
 var key = "b4f8c0c7635f215dd8cddc20829a24e2";
 var token = "98956b6556f88aad6697ac25f4474a79c3af909f6c8b6e503361c8726ecc3df1";
@@ -141,12 +200,10 @@ function getBoards(){
       $.ajax({ 
         url:'https://api.trello.com/1/members/me/boards?key=b4f8c0c7635f215dd8cddc20829a24e2&token=98956b6556f88aad6697ac25f4474a79c3af909f6c8b6e503361c8726ecc3df1' })
          .then( function(data) { 
-            $.each(data, function(index, val){    
-                                
-                      $('.myboards').append(
+            $.each(data, function(index, val){                                
+               $('.myboards').append(
                        "<li class='list-group-item myBoardUrl'>"+"<span class='myBoardName p-3 m-2 btn btn-small bg-light'>"+data[index].name+"</span>"+data[index].url+"</li>");            
-                    
-             })
+                    })
           })
          $('.boardsLoader').hide()//hide button 
 }
@@ -155,28 +212,55 @@ function createBoard(){
   //prevent form action default behaviour
     event.preventDefault();
     //get value of board name
-    var newBoardName = $('input[name=name]').val();
+    var newBoardName = $('input[name=newboardName]').val();
     //form data to send to trello server
     var formData = {'name' : newBoardName,'description': $('input[name=description]').val()};
     // process the form
    $.ajax({
        type : 'POST', // type of HTTP verb 
-       url  :'https://api.trello.com/1/boards?key='+key+'&token='+token+"&name="+newBoardName, // the url to POST
-       data : formData, // form data object
-       dataType : 'application/json', // type of data to send
-       headers: {'Content-Type': 'application/json'},
+       url  :'https://api.trello.com/1/boards?key='+key+'&token='+token+'&name='+newBoardName,// the url to POST
+       data : formData, // form data object       
        crossDomain: true}).done(function(data) {//  promise callback
-                      $('form').html('<div class="alert alert-success">new board created..</div>');
+                      $('#newBoardForm').html('<div class="alert alert-success">new board created..</div>');
                        }).fail(function(data) {// using the fail promise callback
       //Server failed to respond - Show an error message
       $('.msg').html(alert('error connecting server'));
+    });
+}
+
+function addToDoItem(){
+  event.preventDefault();
+  var cardName = $('input[name=name]').val();
+  var idList   = $('input[name=idList]').val();
+
+  var formData = {
+                  'name' : cardName,
+                  'description': $('input[name=description]').val(),
+                  'due date': $('input[name=date]').val(),
+                  'Key-task1': $('input[name=Key-task1]').val(),
+                  'Key-task2': $('input[name=Key-task2]').val(),
+                  'additional-task1': $('input[name=additional-task1]').val(),
+                  'additional-task2': $('input[name=additional-task2]').val(),
+                };
+
+// process the form
+   $.ajax({
+       type : 'PUT', // type of HTTP verb 
+       url  :'https://api.trello.com/1/boards/?key='+key+'&token='+token+'&idList='+idList, // the url to POST
+       data : formData, // form data object       
+       crossDomain: true 
+       }).done(function(data) {//  promise callback
+          $('form').html(alert('new card posted..'));
+        }).fail(function(data) {// using the fail promise callback
+       //Server failed to respond - Show an error message
+      $('form').html('<div class="alert alert-danger">Could not reach server, please try again later.</div>');
     });
 
 }
   
   $( ".userLoader" ).on( "click", getUser);
   $( ".boardsLoader" ).on( "click", getBoards);
-  $('#newBoardSubmit').on('submit', createBoard);
+  $('#newBoardForm').on('submit', createBoard);
 })
 
 </script>
