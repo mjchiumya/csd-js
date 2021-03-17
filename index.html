@@ -165,46 +165,39 @@
 
 $(document).ready(function(){
 
-  $.ajax({
-    url: 'https://api.trello.com/1/members/me/boards?key=b4f8c0c7635f215dd8cddc20829a24e2&token=98956b6556f88aad6697ac25f4474a79c3af909f6c8b6e503361c8726ecc3df1' 
-  }).then(function(data){
-     $.each(data, function(i, k){
-           $('#myboardList').append("<option value="+data[i].id+" id='idList'>"+data[i].name+"</option>");      
+//key and token from trello api
+var key   = "b4f8c0c7635f215dd8cddc20829a24e2";
+var token = "98956b6556f88aad6697ac25f4474a79c3af909f6c8b6e503361c8726ecc3df1";
+var myurl = "https://api.trello.com/1/members/me?key="+key+"&token="+token;
+var myUrl = "https://api.trello.com/1/";
+//hide the boards button
+$('.boards').hide();
+
+$.ajax({ url: myUrl+'members/me/boards?key='+key+'&token='+token }).then(function(data){
+     $.each(data, function(i, k){           
+                     getLists(data[i].id)     
      })
   })
 
-  // $.ajax({
-  //   url: 'https://api.trello.com/1/boards/'+idBoard+'/lists/all?key=b4f8c0c7635f215dd8cddc20829a24e2&token=98956b6556f88aad6697ac25f4474a79c3af909f6c8b6e503361c8726ecc3df1' 
-  // }).then(function(data){
-  //    $.each(data, function(i, k){
-  //          $('#newBoardformLists').append("<option value="+data[i].id+" id='idList'>"+data[i].name+"</option>");      
-  //    })
-  // })
+function getLists(idBoard){
+  $.ajax({ url: myUrl+'boards/'+idBoard+'/lists/all?key='+key+'&token='+token }).then(function(data){
+     $.each(data, function(i, k){
+           $('.updateBoardSubmit').append("<option value="+data[i].id+" id='idList'>"+data[i].name+"</option>");
+     })
+  })
+}
 
-  $.ajax({
-    url: 'https://api.trello.com/1/members/me/boards?key=b4f8c0c7635f215dd8cddc20829a24e2&token=98956b6556f88aad6697ac25f4474a79c3af909f6c8b6e503361c8726ecc3df1' 
-  }).then(function(data){
-     $.each(data, function(i, k){          
-           $('.newbordEntry').append(
-               "<div class='container-fluid'><div id='accordion'>"+       
+  $.ajax({ url: myUrl+"members/me/boards?key="+key+"&token="+token}).then(function(data){
+         $.each(data, function(i, k){          
+               $('.newbordEntry').append(           
 
-                "<div class='card'><div class='card-header'><a class='card-link' data-toggle='collapse' href='#collapseOne'>choose board</a></div>"+
-
-                    "<div id='collapseOne' class='collapse show' data-parent='#accordion'><div class='card-body'><a class='card-link btn btn-dark p-3' data-toggle='collapse' href='#collapseTwo'>next</a></div></div></div>"+
-
-                    "<div class='card'><div class='card-header'><a class='card-link' href='#'>choose list</a></div>"+
-                    "<div id='collapseTwo' class='collapse' data-parent='#accordion'><div class='card-body'><a class='card-link btn btn-dark p-3' data-toggle='collapse' href='#collapseThree'>next</a></div></div></div>"+
-
-                    "<div class='card'><div class='card-header'><a class='card-link' data-toggle='collapse' href='#collapseOne'>new card</a></div>"+
-                    "<div id='collapseThree' class='collapse' data-parent='#accordion'><div class='card-body'>"+
+                    "<div class='card'><div class='card-body'>"+
 
                      "<div class='card'><div class='card-body'><h4 class='card-title'>"
                       + data[i].name + "</h4>"+
 
                       "<form id='updateBoardSubmit'>"+
-
-                      "<ul class='list-group myboards' id='newBoardformLists'></ul>"+
-
+                     
                       " <div class='form-group'><label for='name'>CardName:</label><input type='text' class='form-control' name='name'></div>"+
 
                       "<div class='form-group'><label for='name'>Due date:</label><input type='date' class='form-control' name='date' id='date'></div>"+
@@ -224,14 +217,6 @@ $(document).ready(function(){
                     "</div></div></div>");
                     })
   })
-    //key and token from trello api
-var key = "b4f8c0c7635f215dd8cddc20829a24e2";
-var token = "98956b6556f88aad6697ac25f4474a79c3af909f6c8b6e503361c8726ecc3df1";
-var myurl = "https://api.trello.com/1/members/me?key="+key+"&token="+token;
-
-
- //hide the boards button
- $('.boards').hide();
   
  //funhction to get users
  function getUser(){ 
@@ -243,13 +228,11 @@ var myurl = "https://api.trello.com/1/members/me?key="+key+"&token="+token;
         $('.userLoader').hide();
          $('.boards').show();
     });    
-  }
+  }  
 
-  //function to get boards associated with user
+//function to get boards associated with user
 function getBoards(){ 
-      $.ajax({ 
-        url:'https://api.trello.com/1/members/me/boards?key=b4f8c0c7635f215dd8cddc20829a24e2&token=98956b6556f88aad6697ac25f4474a79c3af909f6c8b6e503361c8726ecc3df1' })
-         .then( function(data) { 
+      $.ajax({ url:myUrl+'members/me/boards?key='+key+'&token='+token }).then( function(data) { 
             $.each(data, function(index, val){                                
                $('.myboards').append(
                        "<li class='list-group-item myBoardUrl'>"+"<span class='myBoardName p-3 m-2 btn btn-small bg-light'>"+data[index].name+"</span>"+data[index].url+"</li>");            
@@ -268,7 +251,7 @@ function createBoard(){
     // process the form
    $.ajax({
        type : 'POST', // type of HTTP verb 
-       url  :'https://api.trello.com/1/boards?key='+key+'&token='+token+'&name='+newBoardName,// the url to POST
+       url  :myUrl+'boards?key='+key+'&token='+token+'&name='+newBoardName,// the url to POST
        data : formData, // form data object       
        crossDomain: true}).done(function(data) {//  promise callback
                       $('#newBoardForm').html('<div class="alert alert-success">new board created..</div>');
@@ -297,7 +280,7 @@ function addToDoItem(){
 // process the form
    $.ajax({
        type : 'PUT', // type of HTTP verb 
-       url  :'https://api.trello.com/1/boards/?key='+key+'&token='+token+'&idList='+idList, // the url to POST
+       url  :myUrl+'boards/?key='+key+'&token='+token+'&idList='+idList, // the url to POST
        data : formData, // form data object       
        crossDomain: true 
        }).done(function(data) {//  promise callback
@@ -307,13 +290,13 @@ function addToDoItem(){
       $('form').html('<div class="alert alert-danger">Could not reach server, please try again later.</div>');
     });
 
-}
+ }
   
   $( ".userLoader" ).on( "click", getUser);
   $( ".boardsLoader" ).on( "click", getBoards);
-  $('#newBoardForm').on('submit', createBoard);
+  $('#newBoardForm').on('submit', createBoard);  
 })
-
 </script>
+
 </body>
 </html>
