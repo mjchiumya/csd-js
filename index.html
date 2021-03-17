@@ -4,6 +4,55 @@
     <head>
       <!-- Latest compiled and minified CSS -->
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+      <style type="text/css">
+         .dropdown-submenu {
+    position: relative;
+}
+
+.dropdown-submenu>.dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-top: -6px;
+    margin-left: -1px;
+    -webkit-border-radius: 0 6px 6px 6px;
+    -moz-border-radius: 0 6px 6px;
+    border-radius: 0 6px 6px 6px;
+}
+
+.dropdown-submenu:hover>.dropdown-menu {
+    display: block;
+}
+
+.dropdown-submenu>a:after {
+    display: block;
+    content: " ";
+    float: right;
+    width: 0;
+    height: 0;
+    border-color: transparent;
+    border-style: solid;
+    border-width: 5px 0 5px 5px;
+    border-left-color: #ccc;
+    margin-top: 5px;
+    margin-right: -10px;
+}
+
+.dropdown-submenu:hover>a:after {
+    border-left-color: #fff;
+}
+
+.dropdown-submenu.pull-left {
+    float: none;
+}
+
+.dropdown-submenu.pull-left>.dropdown-menu {
+    left: -100%;
+    margin-left: 10px;
+    -webkit-border-radius: 6px 0 6px 6px;
+    -moz-border-radius: 6px 0 6px 6px;
+    border-radius: 6px 0 6px 6px;
+}
+      </style>
    </head>
 
 
@@ -51,62 +100,12 @@
 
   <div class="tab-pane fade" id="add-item" role="tabpanel" aria-labelledby="add-item-tab">
     <div class="container bg-light shadow-lg p-4 mb-4">
-      <!-- add items to board section -->                 
-       <h2>add card on list</h2> 
 
-      <form  id="updateBoardSubmit">
-
-        <div class="form-group">
-           <label class="input-group-text" for="myboardList">select board to add card</label>
-           <select class="custom-select" id="myboardList">
-             <option selected>select board</option>    
-          </select>
-       </div>
-
-       <div class="form-group">
-         <label for="name">Card Name:</label>
-            <input type="text" class="form-control" name="name">
-        </div>
-        
-        <div class="form-group">
-          <label for="name">Due date:</label>                    
-           <input type="date" class="form-control" name="date" id="date">
-        </div>
-
-        <div class="form-group">
-          <label for="description">Description:</label>
-           <textarea class="form-control" rows="3" name="description" id="description"></textarea>
-        </div>
-         
-        <div class="container bg-faded py-2">
-         
-          <div class="form-group">
-            <label for="Key-task1">Key-task1:</label>
-              <textarea class="form-control" rows="2" name="Key-task1"  id="Key-task1"></textarea>
-           </div>
-
-          <div class="form-group">
-            <label for="key-task2">key-task2</label>
-            <textarea class="form-control" rows="2" name="key-task2" id="key-task2"></textarea>
-           </div>
-
+       <div class="newbordEntry">
+          
          </div>
 
-       <div class="container bg-faded py-2">
-        <div class="form-group">
-          <label for="additional-task1">additional-task1:</label>
-            <textarea class="form-control" rows="2" name="additional-task1"  id="additional-task1"></textarea>
-        </div>
-
-        <div class="form-group">
-          <label for="additional-task2">additional-task2</label>
-            <textarea class="form-control" rows="2" name="additional-task2" id="additional-task2"></textarea>
-        </div>
-     </div>
-
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
-  </div>
+      </div> 
 </div>
 
   <div class="tab-pane fade" id="create-board" role="tabpanel" aria-labelledby="create-board-tab">
@@ -165,14 +164,65 @@
 <script crossorigin="anonymous" type="text/javascript">
 
 $(document).ready(function(){
+
   $.ajax({
-    url: 'https://api.trello.com/1/members/me/boards/lists?key=b4f8c0c7635f215dd8cddc20829a24e2&token=98956b6556f88aad6697ac25f4474a79c3af909f6c8b6e503361c8726ecc3df1' 
+    url: 'https://api.trello.com/1/members/me/boards?key=b4f8c0c7635f215dd8cddc20829a24e2&token=98956b6556f88aad6697ac25f4474a79c3af909f6c8b6e503361c8726ecc3df1' 
   }).then(function(data){
-     $.each(data, function(i, k){   
-
-           $('#myboardList').append("<option value="+data[i].id+" id='idList'>"+data[i].name+"</option>");
+     $.each(data, function(i, k){
+           $('#myboardList').append("<option value="+data[i].id+" id='idList'>"+data[i].name+"</option>");      
      })
+  })
 
+  // $.ajax({
+  //   url: 'https://api.trello.com/1/boards/'+idBoard+'/lists/all?key=b4f8c0c7635f215dd8cddc20829a24e2&token=98956b6556f88aad6697ac25f4474a79c3af909f6c8b6e503361c8726ecc3df1' 
+  // }).then(function(data){
+  //    $.each(data, function(i, k){
+  //          $('#newBoardformLists').append("<option value="+data[i].id+" id='idList'>"+data[i].name+"</option>");      
+  //    })
+  // })
+
+  $.ajax({
+    url: 'https://api.trello.com/1/members/me/boards?key=b4f8c0c7635f215dd8cddc20829a24e2&token=98956b6556f88aad6697ac25f4474a79c3af909f6c8b6e503361c8726ecc3df1' 
+  }).then(function(data){
+     $.each(data, function(i, k){          
+           $('.newbordEntry').append(
+               "<div class='container-fluid'><div id='accordion'>"+       
+
+                "<div class='card'><div class='card-header'><a class='card-link' data-toggle='collapse' href='#collapseOne'>choose board</a></div>"+
+
+                    "<div id='collapseOne' class='collapse show' data-parent='#accordion'><div class='card-body'><a class='card-link btn btn-dark p-3' data-toggle='collapse' href='#collapseTwo'>next</a></div></div></div>"+
+
+                    "<div class='card'><div class='card-header'><a class='card-link' href='#'>choose list</a></div>"+
+                    "<div id='collapseTwo' class='collapse' data-parent='#accordion'><div class='card-body'><a class='card-link btn btn-dark p-3' data-toggle='collapse' href='#collapseThree'>next</a></div></div></div>"+
+
+                    "<div class='card'><div class='card-header'><a class='card-link' data-toggle='collapse' href='#collapseOne'>new card</a></div>"+
+                    "<div id='collapseThree' class='collapse' data-parent='#accordion'><div class='card-body'>"+
+
+                     "<div class='card'><div class='card-body'><h4 class='card-title'>"
+                      + data[i].name + "</h4>"+
+
+                      "<form id='updateBoardSubmit'>"+
+
+                      "<ul class='list-group myboards' id='newBoardformLists'></ul>"+
+
+                      " <div class='form-group'><label for='name'>CardName:</label><input type='text' class='form-control' name='name'></div>"+
+
+                      "<div class='form-group'><label for='name'>Due date:</label><input type='date' class='form-control' name='date' id='date'></div>"+
+
+                      "<div class='form-group'><label for='description'>Description:</label><textarea class='form-control' rows='3' name='description' id='description'></textarea> </div>"+
+
+                      "<div class='container bg-faded py-2'><div class='form-group'><label for='Key-task1'>Key-task1:</label><textarea class='form-control' rows='2' name='Key-task1'  id='Key-task1'></textarea></div>"+
+
+                      "<div class='form-group'><label for='key-task2'>key-task2</label><textarea class='form-control' rows='2' name='key-task2' id='key-task2'></textarea></div></div>"+
+
+                      "<div class='container bg-faded py-2'><div class='form-group'><label for='additional-task1'>additional-task1:</label><textarea class='form-control' rows='2' name='additional-task1'  id='additional-task1'></textarea></div>"+
+
+                      "<div class='form-group'><label for='additional-task2'>additional-task2</label><textarea class='form-control' rows='2' name='additional-task2' id='additional-task2'></textarea> </div></div>"+
+
+                      "<button type='submit' class='btn btn-primary'>Submit</button></form></div></div></div></div>"+
+
+                    "</div></div></div>");
+                    })
   })
     //key and token from trello api
 var key = "b4f8c0c7635f215dd8cddc20829a24e2";
@@ -235,12 +285,13 @@ function addToDoItem(){
 
   var formData = {
                   'name' : cardName,
-                  'description': $('input[name=description]').val(),
-                  'due date': $('input[name=date]').val(),
+                  'desc': $('input[name=description]').val(),
+                  'due': $('input[name=date]').val(),
                   'Key-task1': $('input[name=Key-task1]').val(),
                   'Key-task2': $('input[name=Key-task2]').val(),
                   'additional-task1': $('input[name=additional-task1]').val(),
                   'additional-task2': $('input[name=additional-task2]').val(),
+                  'idList':$('input[name=additional-task2]').val(),
                 };
 
 // process the form
